@@ -2,16 +2,14 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>ドン計算機</title>
 
 <style>
 html, body {
   margin: 0;
   padding: 0;
-  touch-action: manipulation;
+  touch-action: none;
   overscroll-behavior: none;
   -webkit-text-size-adjust: 100%;
 }
@@ -27,6 +25,7 @@ body {
   max-width: 430px;
   margin: auto;
   padding: 22px;
+  touch-action: manipulation;
 }
 
 h1 {
@@ -43,6 +42,7 @@ input {
   border: 2px solid #007aff;
   border-radius: 12px;
   user-select: text;
+  touch-action: auto;
 }
 
 .result {
@@ -76,7 +76,8 @@ button {
   padding: 14px 4px;
   border: 0;
   border-radius: 12px;
-  touch-action: manipulation;
+  color: white;
+  touch-action: none;
   -webkit-user-select: none;
   user-select: none;
 }
@@ -86,10 +87,10 @@ button:active {
   opacity: 0.85;
 }
 
-.blue { background: #007aff; color: white; }
-.green { background: #22c55e; color: white; }
-.red { background: #ff3b30; color: white; }
-.orange { background: #ff9500; color: white; }
+.blue { background: #007aff; }
+.green { background: #22c55e; }
+.red { background: #ff3b30; }
+.orange { background: #ff9500; }
 
 .section {
   text-align: center;
@@ -109,40 +110,39 @@ button:active {
   <div class="rate">1円 = 160VND</div>
 
   <div class="row">
-    <button class="red" onclick="clearInput()">Clear</button>
-    <button class="orange" onclick="addZeros()">000</button>
+    <button class="red" data-action="clear">Clear</button>
+    <button class="orange" data-action="zeros">000</button>
   </div>
 
   <div class="section">Kなし表記で追加</div>
   <div class="grid">
-    <button class="blue" onclick="addValue(1000)">+1,000</button>
-    <button class="blue" onclick="addValue(2000)">+2,000</button>
-    <button class="blue" onclick="addValue(5000)">+5,000</button>
-    <button class="blue" onclick="addValue(10000)">+10,000</button>
-    <button class="blue" onclick="addValue(20000)">+20,000</button>
-    <button class="blue" onclick="addValue(50000)">+50,000</button>
-    <button class="blue" onclick="addValue(100000)">+100,000</button>
-    <button class="blue" onclick="addValue(200000)">+200,000</button>
-    <button class="blue" onclick="addValue(500000)">+500,000</button>
+    <button class="blue" data-add="1000">+1,000</button>
+    <button class="blue" data-add="2000">+2,000</button>
+    <button class="blue" data-add="5000">+5,000</button>
+    <button class="blue" data-add="10000">+10,000</button>
+    <button class="blue" data-add="20000">+20,000</button>
+    <button class="blue" data-add="50000">+50,000</button>
+    <button class="blue" data-add="100000">+100,000</button>
+    <button class="blue" data-add="200000">+200,000</button>
+    <button class="blue" data-add="500000">+500,000</button>
   </div>
 
   <div class="section">Kあり表記で追加</div>
   <div class="grid">
-    <button class="green" onclick="addValue(1000)">+1K</button>
-    <button class="green" onclick="addValue(2000)">+2K</button>
-    <button class="green" onclick="addValue(5000)">+5K</button>
-    <button class="green" onclick="addValue(10000)">+10K</button>
-    <button class="green" onclick="addValue(20000)">+20K</button>
-    <button class="green" onclick="addValue(50000)">+50K</button>
-    <button class="green" onclick="addValue(100000)">+100K</button>
-    <button class="green" onclick="addValue(200000)">+200K</button>
-    <button class="green" onclick="addValue(500000)">+500K</button>
+    <button class="green" data-add="1000">+1K</button>
+    <button class="green" data-add="2000">+2K</button>
+    <button class="green" data-add="5000">+5K</button>
+    <button class="green" data-add="10000">+10K</button>
+    <button class="green" data-add="20000">+20K</button>
+    <button class="green" data-add="50000">+50K</button>
+    <button class="green" data-add="100000">+100K</button>
+    <button class="green" data-add="200000">+200K</button>
+    <button class="green" data-add="500000">+500K</button>
   </div>
 </div>
 
 <script>
 const RATE = 160;
-
 const input = document.getElementById("input");
 const result = document.getElementById("result");
 
@@ -180,15 +180,24 @@ function clearInput() {
   setValue(0);
 }
 
-// ダブルタップ拡大だけ防止
-document.addEventListener("dblclick", function(e) {
-  e.preventDefault();
-}, { passive: false });
+document.querySelectorAll("button").forEach(btn => {
+  btn.addEventListener("touchstart", function(e) {
+    e.preventDefault();
 
-// ピンチズーム対策
-document.addEventListener("gesturestart", function(e) {
-  e.preventDefault();
+    const add = this.dataset.add;
+    const action = this.dataset.action;
+
+    if (add) addValue(Number(add));
+    if (action === "clear") clearInput();
+    if (action === "zeros") addZeros();
+  }, { passive: false });
 });
+
+// Safari拡大系を抑制
+document.addEventListener("gesturestart", e => e.preventDefault());
+document.addEventListener("gesturechange", e => e.preventDefault());
+document.addEventListener("gestureend", e => e.preventDefault());
+document.addEventListener("dblclick", e => e.preventDefault(), { passive: false });
 </script>
 </body>
 </html>
