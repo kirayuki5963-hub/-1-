@@ -2,24 +2,38 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <title>ドン計算機</title>
+
 <style>
-body {
+html, body {
   margin: 0;
+  padding: 0;
+  touch-action: manipulation;
+  overscroll-behavior: none;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   background: #f4f6f8;
   color: #111;
+  user-select: none;
 }
+
 .app {
   max-width: 430px;
   margin: auto;
   padding: 22px;
 }
+
 h1 {
   text-align: center;
   font-size: 28px;
 }
+
 input {
   width: 100%;
   box-sizing: border-box;
@@ -28,39 +42,55 @@ input {
   text-align: center;
   border: 2px solid #007aff;
   border-radius: 12px;
+  user-select: text;
 }
+
 .result {
   text-align: center;
   font-size: 34px;
   font-weight: bold;
   margin-top: 18px;
 }
+
 .rate {
   text-align: center;
   color: #777;
   margin: 8px 0 18px;
 }
+
 .row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
+
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
 }
+
 button {
   font-size: 18px;
   font-weight: bold;
   padding: 14px 4px;
   border: 0;
   border-radius: 12px;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
 }
+
+button:active {
+  transform: scale(0.97);
+  opacity: 0.85;
+}
+
 .blue { background: #007aff; color: white; }
 .green { background: #22c55e; color: white; }
 .red { background: #ff3b30; color: white; }
 .orange { background: #ff9500; color: white; }
+
 .section {
   text-align: center;
   font-weight: bold;
@@ -149,6 +179,16 @@ function addZeros() {
 function clearInput() {
   setValue(0);
 }
+
+// ダブルタップ拡大だけ防止
+document.addEventListener("dblclick", function(e) {
+  e.preventDefault();
+}, { passive: false });
+
+// ピンチズーム対策
+document.addEventListener("gesturestart", function(e) {
+  e.preventDefault();
+});
 </script>
 </body>
 </html>
