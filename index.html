@@ -1,6 +1,154 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ドン計算機</title>
+<style>
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #f4f6f8;
+  color: #111;
+}
+.app {
+  max-width: 430px;
+  margin: auto;
+  padding: 22px;
+}
+h1 {
+  text-align: center;
+  font-size: 28px;
+}
+input {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 30px;
+  padding: 14px;
+  text-align: center;
+  border: 2px solid #007aff;
+  border-radius: 12px;
+}
+.result {
+  text-align: center;
+  font-size: 34px;
+  font-weight: bold;
+  margin-top: 18px;
+}
+.rate {
+  text-align: center;
+  color: #777;
+  margin: 8px 0 18px;
+}
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+button {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 14px 4px;
+  border: 0;
+  border-radius: 12px;
+}
+.blue { background: #007aff; color: white; }
+.green { background: #22c55e; color: white; }
+.red { background: #ff3b30; color: white; }
+.orange { background: #ff9500; color: white; }
+.section {
+  text-align: center;
+  font-weight: bold;
+  margin: 20px 0 10px;
+}
+</style>
+</head>
+
 <body>
-<h1>ドン計算機テスト</h1>
+<div class="app">
+  <h1>🇻🇳 VND → JPY 🇯🇵</h1>
+
+  <input id="input" inputmode="numeric" placeholder="VNDを入力">
+
+  <div class="result" id="result">約 0 円</div>
+  <div class="rate">1円 = 160VND</div>
+
+  <div class="row">
+    <button class="red" onclick="clearInput()">Clear</button>
+    <button class="orange" onclick="addZeros()">000</button>
+  </div>
+
+  <div class="section">Kなし表記で追加</div>
+  <div class="grid">
+    <button class="blue" onclick="addValue(1000)">+1,000</button>
+    <button class="blue" onclick="addValue(2000)">+2,000</button>
+    <button class="blue" onclick="addValue(5000)">+5,000</button>
+    <button class="blue" onclick="addValue(10000)">+10,000</button>
+    <button class="blue" onclick="addValue(20000)">+20,000</button>
+    <button class="blue" onclick="addValue(50000)">+50,000</button>
+    <button class="blue" onclick="addValue(100000)">+100,000</button>
+    <button class="blue" onclick="addValue(200000)">+200,000</button>
+    <button class="blue" onclick="addValue(500000)">+500,000</button>
+  </div>
+
+  <div class="section">Kあり表記で追加</div>
+  <div class="grid">
+    <button class="green" onclick="addValue(1000)">+1K</button>
+    <button class="green" onclick="addValue(2000)">+2K</button>
+    <button class="green" onclick="addValue(5000)">+5K</button>
+    <button class="green" onclick="addValue(10000)">+10K</button>
+    <button class="green" onclick="addValue(20000)">+20K</button>
+    <button class="green" onclick="addValue(50000)">+50K</button>
+    <button class="green" onclick="addValue(100000)">+100K</button>
+    <button class="green" onclick="addValue(200000)">+200K</button>
+    <button class="green" onclick="addValue(500000)">+500K</button>
+  </div>
+</div>
+
+<script>
+const RATE = 160;
+
+const input = document.getElementById("input");
+const result = document.getElementById("result");
+
+input.addEventListener("input", () => {
+  setValue(getValue());
+});
+
+function getValue() {
+  const digits = input.value.replace(/\D/g, "");
+  return digits ? Number(digits) : 0;
+}
+
+function setValue(value) {
+  if (!value) {
+    input.value = "";
+    result.textContent = "約 0 円";
+    return;
+  }
+
+  input.value = value.toLocaleString();
+  const yen = Math.round(value / RATE);
+  result.textContent = "約 " + yen.toLocaleString() + " 円";
+}
+
+function addValue(value) {
+  setValue(getValue() + value);
+}
+
+function addZeros() {
+  const digits = input.value.replace(/\D/g, "");
+  setValue(Number((digits || "0") + "000"));
+}
+
+function clearInput() {
+  setValue(0);
+}
+</script>
 </body>
 </html>
