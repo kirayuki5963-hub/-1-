@@ -216,6 +216,15 @@
 .dice-tumble-area.shonben-run{overflow:visible;z-index:80}.dice-tumble-area.shonben-run .escape-die{z-index:20;transform-style:preserve-3d;animation:slowDiceEscape3d 4.2s cubic-bezier(.42,0,.72,1) forwards}.dice-tumble-area.shonben-run .escape-die:before,.dice-tumble-area.shonben-run .escape-die:after{content:"";position:absolute;left:8%;right:8%;height:8px;border-radius:8px;background:linear-gradient(90deg,#fff 0 42%,transparent 42% 58%,#fff 58%);box-shadow:0 0 0 2px #19151a;transform-origin:center;z-index:-1}.dice-tumble-area.shonben-run .escape-die:before{top:18%;animation:armsRun .42s ease-in-out infinite alternate}.dice-tumble-area.shonben-run .escape-die:after{bottom:-28px;animation:legsRun .34s ease-in-out infinite alternate}@keyframes armsRun{from{transform:rotate(25deg) scaleX(2.05)}to{transform:rotate(-25deg) scaleX(2.05)}}@keyframes legsRun{from{transform:rotate(-34deg) scaleX(1.55)}to{transform:rotate(34deg) scaleX(1.55)}}@keyframes slowDiceEscape3d{0%{translate:0 0}12%{translate:0 -16px}24%{translate:15px 2px}38%{translate:58px -8px}58%{translate:34vw 4vh}78%{translate:72vw -3vh}100%{translate:145vw -12vh}}
 @media(prefers-reduced-motion:reduce){.dice-tumble-area.shonben-run .escape-die{animation-duration:6s}}
 .difficulty{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;width:min(92vw,430px);margin:16px auto 6px;padding:6px;border:1px solid var(--line);border-radius:17px;background:rgba(0,0,0,.28)}.difficulty button{min-height:42px;border:0;border-radius:12px;background:transparent;color:var(--muted);font-size:.78rem;font-weight:1000;cursor:pointer}.difficulty button.active{color:#111;background:#fff;box-shadow:0 7px 18px rgba(0,0,0,.25)}.difficulty button:disabled{opacity:.42;cursor:not-allowed}.difficulty-note{min-height:1.2em;color:var(--muted);font-size:.72rem;margin:6px 0 0;text-align:center}
+.screen.active{animation:screenEnter .38s cubic-bezier(.2,.8,.2,1)}
+.party-fx{position:fixed;inset:0;z-index:120;display:grid;place-items:center;overflow:hidden;pointer-events:none;opacity:0;visibility:hidden;background:radial-gradient(circle,rgba(255,49,88,.24),rgba(0,0,0,.74) 68%);transition:opacity .15s,visibility .15s}
+.party-fx.safe{background:radial-gradient(circle,rgba(87,220,154,.25),rgba(0,0,0,.72) 68%)}.party-fx.gold{background:radial-gradient(circle,rgba(255,214,107,.3),rgba(50,24,0,.76) 70%)}.party-fx.show{opacity:1;visibility:visible}
+.party-card{text-align:center;padding:28px;transform:scale(.45) rotate(-5deg);opacity:0;filter:blur(8px)}.party-fx.show .party-card{animation:partyPop .72s cubic-bezier(.16,1.3,.25,1) forwards}.party-kicker{font-size:.78rem;letter-spacing:.35em;font-weight:1000;color:#ffd6dd}.party-fx.safe .party-kicker{color:#c9ffe6}.party-fx.gold .party-kicker{color:#fff0a8}.party-title{margin:8px 0;font-size:clamp(3.2rem,15vw,9rem);line-height:.9;font-weight:1000;letter-spacing:-.08em;text-shadow:0 0 38px currentColor}.party-sub{margin:14px 0 0;font-size:clamp(.9rem,3.4vw,1.3rem);font-weight:900;color:#fff}
+.party-particle{position:absolute;left:50%;top:50%;width:11px;height:28px;border-radius:4px;background:var(--c);opacity:0}.party-fx.show .party-particle{animation:particleFly var(--d) cubic-bezier(.1,.65,.2,1) forwards;animation-delay:var(--delay)}
+body.party-shake .app{animation:partyShake .46s ease-out}.card.impact{animation:cardImpact .55s cubic-bezier(.2,1.3,.2,1)}
+@keyframes screenEnter{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}@keyframes partyPop{55%{opacity:1;filter:blur(0);transform:scale(1.12) rotate(1deg)}100%{opacity:1;filter:blur(0);transform:scale(1)}}@keyframes particleFly{0%{opacity:1;transform:translate(-50%,-50%) rotate(0)}100%{opacity:0;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) rotate(var(--r))}}@keyframes partyShake{0%,100%{transform:none}15%{transform:translate(-8px,3px) rotate(-.6deg)}32%{transform:translate(8px,-4px) rotate(.5deg)}52%{transform:translate(-5px,2px)}72%{transform:translate(4px,-1px)}}@keyframes cardImpact{0%{transform:rotateY(180deg) scale(.9)}55%{transform:rotateY(180deg) scale(1.06)}100%{transform:rotateY(180deg) scale(1)}}
+@media(prefers-reduced-motion:reduce){.party-particle{display:none}.screen.active,.party-fx.show .party-card,body.party-shake .app,.card.impact{animation:none}}
+
 </style>
 </head>
 <body>
@@ -245,9 +254,9 @@
 <p class="kicker">CHOOSE YOUR DECK</p>
 <h2>WHAT WILL YOU PLAY?</h2>
 <div class="mode-grid">
-<button class="mode-card" data-mode="mission" aria-label="Mission Deckを選ぶ"><span class="deck-content"><span class="mode-icon">🎴</span><h3>Mission Deck</h3><span class="tap">TAP</span></span></button>
-<button class="mode-card" data-mode="fact" aria-label="Fact Deckを選ぶ"><span class="deck-content"><span class="mode-icon">📊</span><h3>Fact Deck</h3><span class="tap">TAP</span></span></button>
-<button class="mode-card" data-mode="reveal" aria-label="Reveal Deckを選ぶ"><span class="deck-content"><span class="mode-icon">📸</span><h3>Reveal Deck</h3><span class="tap">TAP</span></span></button>
+<button class="mode-card" data-mode="mission" aria-label="Mission Deckを選ぶ"><span class="deck-content"><span class="mode-icon">🎴</span><h3>Mission Deck</h3><span class="tap">60 CARDS</span></span></button>
+<button class="mode-card" data-mode="fact" aria-label="Fact Deckを選ぶ"><span class="deck-content"><span class="mode-icon">📊</span><h3>Fact Deck</h3><span class="tap">55 CARDS</span></span></button>
+<button class="mode-card" data-mode="reveal" aria-label="Reveal Deckを選ぶ"><span class="deck-content"><span class="mode-icon">📸</span><h3>Reveal Deck</h3><span class="tap">60 CARDS</span></span></button>
 </div>
 <div class="setup-drawer" id="setupDrawer">
 <div class="selected-deck"><div><strong id="selectedDeckName">Deckを選択</strong><br><span>ゲーム時間とカード構成を設定</span></div><span id="selectedDeckIcon">♥</span></div>
@@ -292,17 +301,107 @@
 <section id="chickenGame" class="screen"><div class="glass quick-screen"><button class="back-link quick-exit">← END GAME</button><div class="quick-head"><p class="kicker">CHICKEN TIMER</p><h2>10秒ギリギリで止めろ。</h2><p>3秒を過ぎると数字が消える。10秒を超えたらDRINK</p></div><div class="quick-stage"><div><button class="chicken-clock" id="chickenClock">START</button><p class="quick-title" id="chickenText">READY?</p><p class="quick-sub" id="chickenSub">タイマーをタップしてスタート</p></div></div></div></section>
 <section id="perfectGame" class="screen"><div class="glass quick-screen"><button class="back-link quick-exit">← END GAME</button><div class="quick-head"><p class="kicker">PERFECT STOP</p><h2>中央で止めろ。</h2><p>白いバーを緑のPERFECTゾーンで止めればSAFE</p><div class="difficulty" id="perfectDifficulty" aria-label="PERFECT STOPの難易度"><button data-level="easy">かんたん</button><button data-level="normal">ふつう</button><button data-level="hard">むずかしい</button></div><p class="difficulty-note" id="perfectDifficultyNote"></p></div><div class="quick-stage"><div class="stop-game"><div class="stop-track" id="stopTrack"><div class="stop-marker" id="stopMarker"></div></div><button class="primary stop-button" id="stopButton">START</button><p class="quick-title" id="stopText">READY?</p><p class="quick-sub" id="stopSub">START後、好きな瞬間にSTOP</p></div></div></div></section>
 <section id="result" class="screen glass result-card"><p class="kicker">GAME FINISHED</p><h2>おつかれさま！🥂</h2><p>今回のHeartShot結果</p><div class="summary-grid"><div class="summary"><b id="drawCount">0</b><span>引いたカード</span></div><div class="summary"><b id="rareCount">0</b><span>レアカード</span></div><div class="summary"><b id="playedTime">0分</b><span>プレイ時間</span></div></div><button class="primary" id="againBtn">もう一度遊ぶ</button></section>
-</main><footer class="footer">HeartShot Private v3.5 — 飲酒は無理せず、水やソフトドリンクでも楽しめます。</footer>
-</div><div class="toast" id="toast">カードを引きました</div>
+</main><footer class="footer">HeartShot Party Decks v4.0 — 飲酒は無理せず、水やソフトドリンクでも楽しめます。</footer>
+</div><div class="party-fx" id="partyFx" aria-live="assertive"><div class="party-card"><div class="party-kicker" id="partyKicker">HEARTSHOT MOMENT</div><div class="party-title" id="partyTitle">DRINK!</div><div class="party-sub" id="partySub"></div></div><div id="partyParticles"></div></div><div class="toast" id="toast">カードを引きました</div>
 <script>
 const missionCards=[
-['関西弁しか話せない','次のカードが出るまで、標準語は禁止。','normal'],['語尾は「にゃ」','すべての発言の最後に「にゃ」を付ける。','safe'],['左手しか使えない','飲む・食べる・スマホ操作は左手だけ。','safe'],['笑ったら乾杯','笑った瞬間に自己申告で乾杯。','normal'],['目を合わせたら乾杯','誰かと目が合った両者が乾杯。','normal'],['敬語しか使えない','タメ口を使ったら乾杯。','safe'],['質問には質問で返す','普通に答えたら乾杯。','normal'],['カタカナ禁止','カタカナ語を言ったら乾杯。','normal'],['スマホ禁止','次のカードまでスマホに触れない。','safe'],['話す前に拍手','発言前に必ず一度拍手する。','safe'],['全員を一度褒める','次のカードまでに全員を一回ずつ褒める。','safe'],['誰かに「なんで？」と言わせる','成功するまで継続。言わせたらセーフ。','normal'],['名前を呼ばれてはいけない','名前を呼ばれたら乾杯。','normal'],['一人称は「拙者」','次のカードまで一人称を変更。','normal'],['全部疑問形で話す','語尾を疑問形にできなければ乾杯。','normal'],['ロボット口調','感情を出さず機械的に話す。','chaos'],['発言は10文字以内','長く話したら乾杯。','normal'],['隣の人の真似','仕草と口調をできる範囲でコピー。','chaos'],['飲む前に一礼','一礼を忘れたら乾杯。','safe'],['笑顔禁止','笑顔になったら乾杯。','normal'],['英単語を1つ入れる','毎回の発言に英単語を1つ加える。','normal'],['全部歌って話す','普通に話したら乾杯。','chaos'],['王様口調','全員に威厳ある口調で話す。','chaos'],['3分以内に全員と乾杯','制限時間内に達成できなければ乾杯。','safe'],['誰かを笑わせる','一人でも笑わせたら解除。','normal'],['無表情を維持','次のカードまで表情を崩さない。','normal'],['グータッチ必須','誰かに話しかける前にグータッチ。','safe'],['自分の名前を言えない','自分の名前を口にしたら乾杯。','normal'],['語尾は「でござる」','忘れたら乾杯。','safe'],['ジェスチャー付きで話す','発言には必ず手振りを付ける。','chaos']
+['関西弁しか話せない','次のカードが出るまで、標準語は禁止。','normal'],['語尾は「にゃ」','すべての発言の最後に「にゃ」を付ける。','safe'],['左手しか使えない','飲む・食べる・スマホ操作は左手だけ。','safe'],['笑ったら乾杯','笑った瞬間に自己申告で乾杯。','normal'],['目を合わせたら乾杯','誰かと目が合った両者が乾杯。','normal'],['敬語しか使えない','タメ口を使ったら乾杯。','safe'],['質問には質問で返す','普通に答えたら乾杯。','normal'],['カタカナ禁止','カタカナ語を言ったら乾杯。','normal'],['スマホ禁止','次のカードまでスマホに触れない。','safe'],['話す前に拍手','発言前に必ず一度拍手する。','safe'],['全員を一度褒める','次のカードまでに全員を一回ずつ褒める。','safe'],['誰かに「なんで？」と言わせる','成功するまで継続。言わせたらセーフ。','normal'],['名前を呼ばれてはいけない','名前を呼ばれたら乾杯。','normal'],['一人称は「拙者」','次のカードまで一人称を変更。','normal'],['全部疑問形で話す','語尾を疑問形にできなければ乾杯。','normal'],['ロボット口調','感情を出さず機械的に話す。','chaos'],['発言は10文字以内','長く話したら乾杯。','normal'],['隣の人の真似','仕草と口調をできる範囲でコピー。','chaos'],['飲む前に一礼','一礼を忘れたら乾杯。','safe'],['笑顔禁止','笑顔になったら乾杯。','normal'],['英単語を1つ入れる','毎回の発言に英単語を1つ加える。','normal'],['全部歌って話す','普通に話したら乾杯。','chaos'],['王様口調','全員に威厳ある口調で話す。','chaos'],['3分以内に全員と乾杯','制限時間内に達成できなければ乾杯。','safe'],['誰かを笑わせる','一人でも笑わせたら解除。','normal'],['無表情を維持','次のカードまで表情を崩さない。','normal'],['グータッチ必須','誰かに話しかける前にグータッチ。','safe'],['自分の名前を言えない','自分の名前を口にしたら乾杯。','normal'],['語尾は「でござる」','忘れたら乾杯。','safe'],['ジェスチャー付きで話す','発言には必ず手振りを付ける。','chaos'],
+['「はい」「いいえ」禁止','どちらかを言ったら乾杯。言い換えて切り抜けよう。','normal'],
+['数字を言ってはいけない','時間・人数・金額も数字で言ったら乾杯。','normal'],
+['全員をあだ名で呼ぶ','その場で決めたあだ名以外で呼んだら乾杯。','safe'],
+['返事は3秒以内','話を振られたら3秒以内に答える。間に合わなければ乾杯。','normal'],
+['必ず相づちを入れる','誰かの話に一度も相づちをしなかったら乾杯。','safe'],
+['最初に「たしかに」','返事の最初は必ず「たしかに」から始める。','safe'],
+['指差し禁止','誰かや何かを指差したら乾杯。','normal'],
+['飲み物を持つ手を固定','次のカードまで最初に選んだ手だけで飲む。','safe'],
+['褒めてから反論','反対意見を言う前に相手を1つ褒める。','safe'],
+['声の大きさ半分','次のカードまでひそひそ声で話す。聞き返されたら乾杯。','normal'],
+['隣の人を師匠と呼ぶ','名前で呼んだら乾杯。','safe'],
+['一文だけで答える','質問への回答が二文以上になったら乾杯。','normal'],
+['全員と一度ハイタッチ','次のカードまでに達成できなければ乾杯。','safe'],
+['擬音を必ず入れる','発言に「ドーン」「スッ」などの擬音を1つ入れる。','chaos'],
+['テレビ通販口調','目の前の物を大げさに褒めながら会話する。','chaos'],
+['感情を逆に表現','嬉しい話は悲しそうに、残念な話は嬉しそうに話す。','chaos'],
+['言い切り禁止','すべて「かもしれない」で終える。','normal'],
+['片目を閉じて話す','発言中に両目を開けたら乾杯。','normal'],
+['乾杯のたびに違う一言','同じ掛け声を使ったら乾杯。','safe'],
+['質問した人も答える','誰かに質問したら、自分の答えも続けて話す。','safe'],
+['外来語を日本語にする','カタカナ語をできるだけ日本語へ言い換える。失敗したら乾杯。','normal'],
+['全員の発言を実況','誰かが動くたびスポーツ実況のように説明する。','chaos'],
+['語尾を伸ばす','発言の最後を2秒以上伸ばす。忘れたら乾杯。','chaos'],
+['両手をテーブルの上','次のカードまで両手を見える位置に置く。外したら乾杯。','safe'],
+['人の名前の前に「伝説の」','名前だけで呼んだら乾杯。','chaos'],
+['笑う代わりに拍手','笑いそうになったら拍手で耐える。笑ったら乾杯。','normal'],
+['会話に食べ物を入れる','毎回の発言に食べ物の名前を1つ入れる。','chaos'],
+['語尾は「知らんけど」','すべての発言の最後に付ける。忘れたら乾杯。','normal'],
+['次の人へ話題を振る','自分が話し終えたら必ず別の人へ質問する。','safe'],
+['乾杯前に今日の感謝','飲む前に誰かへの感謝を1つ言う。','safe']
 ];
 const factCards=[
-['付き合った年月が一番長い人','過去または現在の最長交際期間を比べる。','恋愛'],['ここから家が一番遠い人','現在地から自宅までの距離または所要時間で比べる。','生活'],['今日一番遅く起きた人','今日起きた時刻を比べる。','生活'],['今日一番早く起きた人','今日起きた時刻を比べる。','生活'],['スクリーンタイムが一番長い人','今日または昨日のスマホ使用時間を見せて比べる。','スマホ'],['バッテリー残量が一番少ない人','今の残量をその場で確認。','スマホ'],['最新写真の撮影時刻が一番新しい人','写真アプリの最新写真の時刻を比べる。','スマホ'],['写真フォルダの枚数が一番多い人','端末内の写真・動画合計枚数で比べる。','スマホ'],['財布の現金が一番多い人','見せたくない場合は自己申告でもOK。','お金'],['今月ラーメンを一番食べた人','自己申告で回数を比べる。','食事'],['今日一番歩いた人','歩数アプリで今日の歩数を確認。','健康'],['旅行した都道府県が一番多い人','これまで訪れた都道府県数で比べる。','旅行'],['海外渡航回数が一番多い人','旅行・出張を含む回数で比べる。','旅行'],['運転歴が一番長い人','免許取得からの年数で比べる。','車'],['一番高い買い物をした人','これまで自分で買った最高額の商品。','お金'],['アラーム設定数が一番多い人','時計アプリのアラーム数を比べる。','生活'],['最後にLINEを送った時刻が一番遅い人','直近の送信時刻を比べる。内容は非公開でOK。','スマホ'],['今日コーヒーを一番飲んだ人','杯数で比べる。','食事'],['睡眠時間が一番短かった人','昨夜から今朝までの睡眠時間。','生活'],['一番最近髪を切った人','最後に散髪した日を比べる。','生活'],['所持している靴が一番多い人','おおよその数でもOK。','生活'],['インストールアプリ数が一番多い人','設定画面などで確認。','スマホ'],['告白した回数が一番多い人','自己申告で比べる。','恋愛'],['今月の飲み会回数が一番多い人','今日を含めてもよい。','飲み会'],['今日ここまでの移動距離が一番長い人','出発地点から現在地までの合計。','旅行']
+['付き合った年月が一番長い人','過去または現在の最長交際期間を比べる。','恋愛'],['ここから家が一番遠い人','現在地から自宅までの距離または所要時間で比べる。','生活'],['今日一番遅く起きた人','今日起きた時刻を比べる。','生活'],['今日一番早く起きた人','今日起きた時刻を比べる。','生活'],['スクリーンタイムが一番長い人','今日または昨日のスマホ使用時間を見せて比べる。','スマホ'],['バッテリー残量が一番少ない人','今の残量をその場で確認。','スマホ'],['最新写真の撮影時刻が一番新しい人','写真アプリの最新写真の時刻を比べる。','スマホ'],['写真フォルダの枚数が一番多い人','端末内の写真・動画合計枚数で比べる。','スマホ'],['財布の現金が一番多い人','見せたくない場合は自己申告でもOK。','お金'],['今月ラーメンを一番食べた人','自己申告で回数を比べる。','食事'],['今日一番歩いた人','歩数アプリで今日の歩数を確認。','健康'],['旅行した都道府県が一番多い人','これまで訪れた都道府県数で比べる。','旅行'],['海外渡航回数が一番多い人','旅行・出張を含む回数で比べる。','旅行'],['運転歴が一番長い人','免許取得からの年数で比べる。','車'],['一番高い買い物をした人','これまで自分で買った最高額の商品。','お金'],['アラーム設定数が一番多い人','時計アプリのアラーム数を比べる。','生活'],['最後にLINEを送った時刻が一番遅い人','直近の送信時刻を比べる。内容は非公開でOK。','スマホ'],['今日コーヒーを一番飲んだ人','杯数で比べる。','食事'],['睡眠時間が一番短かった人','昨夜から今朝までの睡眠時間。','生活'],['一番最近髪を切った人','最後に散髪した日を比べる。','生活'],['所持している靴が一番多い人','おおよその数でもOK。','生活'],['インストールアプリ数が一番多い人','設定画面などで確認。','スマホ'],['告白した回数が一番多い人','自己申告で比べる。','恋愛'],['今月の飲み会回数が一番多い人','今日を含めてもよい。','飲み会'],['今日ここまでの移動距離が一番長い人','出発地点から現在地までの合計。','旅行'],
+['誕生日が今日に一番近い人','次に来る誕生日までの日数で比べる。','生活'],
+['スマホを一番長く使っている人','現在の端末を使い始めた時期で比べる。','スマホ'],
+['未読通知が一番多い人','通知センターの件数を比べる。内容は見せなくてOK。','スマホ'],
+['連絡先の登録件数が一番多い人','電話帳の件数で比べる。','スマホ'],
+['一番最近旅行した人','最後に泊まりで出かけた日を比べる。','旅行'],
+['今日一番早く家を出た人','自宅を出発した時刻で比べる。','生活'],
+['一番長く続いた趣味がある人','継続年数で比べる。','趣味'],
+['カラオケの最高点が一番高い人','覚えている自己ベストを申告する。','音楽'],
+['今月コンビニへ一番行った人','おおよその回数で比べる。','生活'],
+['SNSのフォロー数が一番多い人','普段使うSNSを1つ選んで比べる。','スマホ'],
+['一番多く兄弟姉妹がいる人','本人を除く人数で比べる。','家族'],
+['一番長く同じ財布を使っている人','使い始めてからの期間で比べる。','生活'],
+['今日写真を一番多く撮った人','今日の撮影枚数で比べる。','写真'],
+['一番最近映画館へ行った人','最後に映画館で観た日を比べる。','映画'],
+['学生時代の部活歴が一番長い人','同じ部活を続けた期間で比べる。','学生'],
+['一番多く引っ越した人','これまで住居を移した回数で比べる。','生活'],
+['今日の食事回数が一番多い人','間食も1回として数えてよい。','食事'],
+['一番最近新しい服を買った人','最後に服を買った日で比べる。','買い物'],
+['動画の視聴時間が一番長い人','今日または昨日の視聴時間を比べる。','動画'],
+['一番遠くまで運転したことがある人','自分で運転した最長距離で比べる。','車'],
+['持っているポイントカードが一番多い人','アプリ会員証も含めて比べる。','買い物'],
+['一番多くライブへ行った人','これまで参加した回数で比べる。','音楽'],
+['今日一番多く階段を上った人','ヘルスケアアプリまたは自己申告で比べる。','健康'],
+['一番最近料理をした人','最後に自分で料理した日で比べる。','食事'],
+['一番長い通学・通勤を経験した人','片道の最長所要時間で比べる。','生活'],
+['一番多く資格を持っている人','免許や検定も含めて比べる。','仕事'],
+['スマホの画面を一番割った人','これまで割った回数で比べる。','スマホ'],
+['一番最近徹夜した人','最後に朝まで起きていた日を比べる。','生活'],
+['今週一番多く外食した人','回数を自己申告して比べる。','食事'],
+['一番長いあだ名を持つ人','普段呼ばれるあだ名の文字数で比べる。','友達']
 ];
 const revealCards=[
-['一番最新の写真を全員に見せる','見せられない、または見せたくない場合は乾杯。','写真'],['一番最新の動画を見せる','再生は3秒だけでもOK。','動画'],['この場の誰も知らない話を暴露','一人でも知っていたらアウト。誰も知らなければセーフ。','秘密'],['最近一番笑ったLINEを見せる','個人名や内容は隠してもOK。','スマホ'],['一番古い写真を見せる','端末に残っている一番古い写真。','写真'],['最近の検索履歴を1件公開','公開したくない場合は乾杯。','検索'],['最近一番聴いた曲を流す','サビを10秒流して理由も話す。','音楽'],['スマホのホーム画面を3秒公開','フォルダ名や壁紙にも注目。','スマホ'],['最後に買った物を公開','通販・コンビニ・店舗、何でもOK。','買い物'],['人生最大の黒歴史を話す','軽く話せる範囲で。話せなければ乾杯。','暴露'],['学生時代に一番怒られた話','先生・親・部活など何でもOK。','トーク'],['今だから言える失敗談','当時は焦ったが今は笑える話。','トーク'],['人生で一番緊張した瞬間','面接、告白、試合など。','トーク'],['一番無駄遣いした物を告白','金額も言えたら追加ポイント。','買い物'],['最近保存したスクショを見せる','見せられない場合は乾杯。','写真'],['予測変換「あ・か・さ」を公開','それぞれ最初に出た候補を読み上げる。','スマホ'],['最後に電話した相手を公開','内容は話さなくてOK。','スマホ'],['一番恥ずかしかったデート話','無理のない範囲で話す。','恋愛'],['人生最大のラッキーを話す','全員が「すごい」と思えばセーフ。','トーク'],['最近撮った自撮りを見せる','なければその場で撮るか乾杯。','写真'],['誰にも言っていない小さな秘密','重すぎない内容限定。誰か知っていたらアウト。','秘密'],['最近一番後悔したこと','笑える範囲で話す。','トーク'],['一番古いメモを読み上げる','個人情報部分は隠してOK。','スマホ'],['お気に入り写真を1枚紹介','なぜ好きかも説明する。','写真'],['直近のYouTube視聴履歴を1件公開','見せたくなければ乾杯。','動画'],['この場の誰かへの第一印象を話す','現在の印象との違いも話す。','会話'],['誰にも負けない小さな特技を披露','披露できなければ乾杯。','特技'],['一番怖かった体験を話す','全員が驚けばセーフ。','トーク'],['最近の写真から1枚をランダム選択','10枚スクロールして止まった写真を見せる。','写真'],['この場の誰かにまだ言っていない感謝','本人へ直接伝える。','会話']
+['一番最新の写真を全員に見せる','見せられない、または見せたくない場合は乾杯。','写真'],['一番最新の動画を見せる','再生は3秒だけでもOK。','動画'],['この場の誰も知らない話を暴露','一人でも知っていたらアウト。誰も知らなければセーフ。','秘密'],['最近一番笑ったLINEを見せる','個人名や内容は隠してもOK。','スマホ'],['一番古い写真を見せる','端末に残っている一番古い写真。','写真'],['最近の検索履歴を1件公開','公開したくない場合は乾杯。','検索'],['最近一番聴いた曲を流す','サビを10秒流して理由も話す。','音楽'],['スマホのホーム画面を3秒公開','フォルダ名や壁紙にも注目。','スマホ'],['最後に買った物を公開','通販・コンビニ・店舗、何でもOK。','買い物'],['人生最大の黒歴史を話す','軽く話せる範囲で。話せなければ乾杯。','暴露'],['学生時代に一番怒られた話','先生・親・部活など何でもOK。','トーク'],['今だから言える失敗談','当時は焦ったが今は笑える話。','トーク'],['人生で一番緊張した瞬間','面接、告白、試合など。','トーク'],['一番無駄遣いした物を告白','金額も言えたら追加ポイント。','買い物'],['最近保存したスクショを見せる','見せられない場合は乾杯。','写真'],['予測変換「あ・か・さ」を公開','それぞれ最初に出た候補を読み上げる。','スマホ'],['最後に電話した相手を公開','内容は話さなくてOK。','スマホ'],['一番恥ずかしかったデート話','無理のない範囲で話す。','恋愛'],['人生最大のラッキーを話す','全員が「すごい」と思えばセーフ。','トーク'],['最近撮った自撮りを見せる','なければその場で撮るか乾杯。','写真'],['誰にも言っていない小さな秘密','重すぎない内容限定。誰か知っていたらアウト。','秘密'],['最近一番後悔したこと','笑える範囲で話す。','トーク'],['一番古いメモを読み上げる','個人情報部分は隠してOK。','スマホ'],['お気に入り写真を1枚紹介','なぜ好きかも説明する。','写真'],['直近のYouTube視聴履歴を1件公開','見せたくなければ乾杯。','動画'],['この場の誰かへの第一印象を話す','現在の印象との違いも話す。','会話'],['誰にも負けない小さな特技を披露','披露できなければ乾杯。','特技'],['一番怖かった体験を話す','全員が驚けばセーフ。','トーク'],['最近の写真から1枚をランダム選択','10枚スクロールして止まった写真を見せる。','写真'],['この場の誰かにまだ言っていない感謝','本人へ直接伝える。','会話'],
+['最近使った絵文字トップ3を公開','キーボードの履歴から3つ読み上げる。','スマホ'],
+['スマホのロック画面を見せる','壁紙を選んだ理由も一言話す。','スマホ'],
+['子どもの頃のあだ名を公開','由来まで説明できたらセーフ。','トーク'],
+['最近ハマっているものを30秒プレゼン','全員のうち1人でも興味を持てばセーフ。','趣味'],
+['人生で一番ダサかった服装を話す','写真があれば見せてもよい。','トーク'],
+['初めて買ったCD・曲を公開','覚えていなければ当時好きだった曲でOK。','音楽'],
+['最後に保存した画像を見せる','個人情報部分は隠してOK。','写真'],
+['最近ついた小さな嘘を告白','笑える軽い内容限定。','秘密'],
+['この場で一番頼りたい人を指名','選んだ理由を本人へ伝える。','会話'],
+['自分の意外な苦手を公開','他の人が知らなそうなものを1つ話す。','トーク'],
+['最近一番うれしかったこと','30秒以内で話す。','トーク'],
+['今の待ち受けの一つ前を見せる','残っていなければ現在の壁紙でOK。','スマホ'],
+['一番よく使うアプリを公開','スクリーンタイムで確認して理由も話す。','スマホ'],
+['学生時代の呼び出された話','先生や先輩に呼ばれた理由を話す。','学生'],
+['この場の誰かの長所を本気で語る','まだ褒められていない人を選ぶ。','会話'],
+['最近見た夢を話す','覚えていなければ一番印象的な夢でOK。','トーク'],
+['人生で一番笑った出来事','全員を笑わせられたらセーフ。','トーク'],
+['自分だけの変な習慣を公開','家で無意識にしていることを1つ話す。','秘密'],
+['最後に送ったスタンプを見せる','相手や会話内容は隠してOK。','スマホ'],
+['一番好きな自分の写真を見せる','選んだ理由も説明する。','写真'],
+['一番苦手な食べ物と理由を話す','克服したいかどうかも答える。','食事'],
+['この場の全員との共通点を探す','30秒以内に1つ見つけられなければ乾杯。','会話'],
+['昔の将来の夢を公開','今との違いも話す。','トーク'],
+['最近の小さな自慢を披露','全員が拍手したらセーフ。','トーク'],
+['一番長く使っている持ち物を見せる','手元になければ写真か説明だけでもOK。','生活'],
+['この場で一番最初に仲良くなった人','当時の第一印象も話す。','会話'],
+['自分を動物に例える','理由を全員が納得したらセーフ。','会話'],
+['スマホのメモから安全な1行を読む','個人情報や仕事情報は除外してよい。','スマホ'],
+['最近誰かに感謝された話','何をしたのか30秒で説明する。','トーク'],
+['明日から直したい癖を宣言','全員に覚えてもらう。','会話']
 ];
 const rareCards=[
 ['🌈','逆転カード','今までの継続ミッションをすべてリセットする。','RESET'],['👑','王様カード','引いた人が他のプレイヤー1人へ、安全な新ミッションを指定できる。','KING'],['🔄','交換カード','自分の現在ミッションを他の人と交換できる。','SWAP'],['💣','全員ミッション','次に出た通常ミッションを全員で実行する。','ALL'],['🛡️','シールドカード','次に自分が対象となる乾杯を1回だけ無効化する。','SHIELD']
@@ -314,6 +413,11 @@ const savedPrefs=(()=>{try{return JSON.parse(localStorage.getItem('heartshot-pre
 const state={mode:'mission',deck:[],draws:0,rares:0,sound:savedPrefs.sfx!==false,bgm:savedPrefs.bgm===true,vibration:savedPrefs.vibration!==false,silent:savedPrefs.silent===true,totalSeconds:1800,remaining:1800,timerId:null,flipped:false,pendingAll:false,shield:false,startAt:0};
 const $=id=>document.getElementById(id);const category=$('category'),setup=$('setup'),game=$('game'),diceSetup=$('diceSetup'),diceGame=$('diceGame'),eggSetup=$('eggSetup'),eggGame=$('eggGame'),bombGame=$('bombGame'),fingerGame=$('fingerGame'),redGame=$('redGame'),highLowGame=$('highLowGame'),reactionGame=$('reactionGame'),panicGame=$('panicGame'),chickenGame=$('chickenGame'),perfectGame=$('perfectGame'),result=$('result'),card=$('card'),front=$('front');
 function shuffle(a){return [...a].sort(()=>Math.random()-.5)}function showToast(t){$('toast').textContent=t;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),1500)}
+let partyFxTimer=null;
+function partyMoment(title,subtitle='',tone='hot',duration=1050){const fx=$('partyFx');if(!fx)return;clearTimeout(partyFxTimer);fx.className='party-fx '+tone;$('partyTitle').textContent=title;$('partySub').textContent=subtitle;$('partyKicker').textContent=tone==='gold'?'LUCKY MOMENT':tone==='safe'?'NICE PLAY':'HEARTSHOT MOMENT';const palette=tone==='safe'?['#57dc9a','#ffffff','#5db2ff']:tone==='gold'?['#ffd66b','#ffffff','#ff8b24']:['#ff3158','#ffffff','#ae78ff','#ff8b24'];$('partyParticles').innerHTML=Array.from({length:30},(_,i)=>{const angle=Math.PI*2*i/30+(Math.random()-.5)*.25,dist=150+Math.random()*360,x=Math.cos(angle)*dist,y=Math.sin(angle)*dist,r=(Math.random()*900-450)+'deg',d=(.65+Math.random()*.55)+'s',delay=(Math.random()*.12)+'s';return `<i class="party-particle" style="--x:${x}px;--y:${y}px;--r:${r};--d:${d};--delay:${delay};--c:${palette[i%palette.length]}"></i>`}).join('');void fx.offsetWidth;fx.classList.add('show');document.body.classList.remove('party-shake');void document.body.offsetWidth;document.body.classList.add('party-shake');if(tone==='hot'){beep(150,.28);vibrate([100,45,180])}else{beep(tone==='gold'?920:760,.16);vibrate(60)}partyFxTimer=setTimeout(()=>{fx.classList.remove('show');document.body.classList.remove('party-shake')},duration)}
+function cardImpact(){card.classList.remove('impact');void card.offsetWidth;card.classList.add('impact');setTimeout(()=>card.classList.remove('impact'),620)}
+function observePartyResults(){const ids=['eggResult','bombText','fingerText','redText','reactionText','panicWord','chickenText','stopText'];ids.forEach(id=>{const el=$(id);if(!el)return;let previous=el.textContent.trim();const scan=()=>{const next=el.textContent.trim();if(next===previous)return;previous=next;if(/DRINK|YOU DRINK|LAST!|爆発/.test(next))partyMoment('DRINK!',id==='fingerText'?'選ばれた指が負け':'負けた人は乾杯！','hot');else if(/SAFE|PERFECT/.test(next))partyMoment('SAFE!',next.replace(/!/g,''),'safe',700)};new MutationObserver(scan).observe(el,{childList:true,subtree:true,characterData:true})})}
+
 let audioCtx=null,bgmTimer=null,bgmStep=0;
 function getAudio(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx}
 function beep(freq=520,duration=.13){if(!state.sound||state.silent)return;try{const c=getAudio(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=freq;g.gain.setValueAtTime(.08,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+duration);o.start();o.stop(c.currentTime+duration)}catch(e){}}
@@ -324,16 +428,16 @@ function savePrefs(){localStorage.setItem('heartshot-preferences',JSON.stringify
 function renderPrefs(){$('sfxToggle').checked=state.sound;$('bgmToggle').checked=state.bgm;$('vibrationToggle').checked=state.vibration;$('silentToggle').checked=state.silent;$('soundBtn').textContent=state.silent?'🔇':'⚙️';syncBgm()}
 function setPref(key,value){state[key]=value;savePrefs();renderPrefs();if(key==='sound'&&value&&!state.silent)beep(680,.09);if(key==='vibration'&&value&&!state.silent)vibrate(50)}
 function buildDeck(){const diff=$('difficulty').value;let base=state.mode==='mission'?missionCards:state.mode==='fact'?factCards:revealCards;if(diff==='safe'&&state.mode==='mission')base=base.filter(x=>x[2]!=='chaos');if(diff==='chaos'&&state.mode==='mission')base=[...base,...missionCards.filter(x=>x[2]==='chaos')];let deck=base.map(x=>({kind:'normal',data:x}));const rareNum=diff==='safe'?3:diff==='chaos'?8:5;for(let i=0;i<rareNum;i++)deck.push({kind:'rare',data:rareCards[i%rareCards.length]});return shuffle(deck)}
-function switchScreen(el){[category,setup,game,diceSetup,diceGame,eggSetup,eggGame,bombGame,fingerGame,redGame,highLowGame,reactionGame,panicGame,chickenGame,perfectGame,result].forEach(x=>x.classList.remove('active'));el.classList.add('active')}
-function startGame(){state.totalSeconds=Number($('minutes').value)*60;state.remaining=state.totalSeconds;state.deck=buildDeck();state.draws=0;state.rares=0;state.startAt=Date.now();state.flipped=false;state.pendingAll=false;state.shield=false;$('history').innerHTML='';$('modeLabel').textContent={mission:'Mission Deck',fact:'Fact Deck',reveal:'Reveal Deck'}[state.mode];$('rareState').textContent='なし';$('panelTitle').textContent='カードを引こう';$('panelDesc').textContent='カードをタップ、または「カードを引く」を押してください。';resetCard();switchScreen(game);updateTimer();state.timerId=setInterval(()=>{state.remaining--;updateTimer();if(state.remaining<=0)finishGame()},1000)}
+function switchScreen(el){window.scrollTo({top:0,behavior:'smooth'});[category,setup,game,diceSetup,diceGame,eggSetup,eggGame,bombGame,fingerGame,redGame,highLowGame,reactionGame,panicGame,chickenGame,perfectGame,result].forEach(x=>x.classList.remove('active'));el.classList.add('active')}
+function startGame(){state.totalSeconds=Number($('minutes').value)*60;state.remaining=state.totalSeconds;state.deck=buildDeck();state.draws=0;state.rares=0;state.startAt=Date.now();state.flipped=false;state.pendingAll=false;state.shield=false;$('history').innerHTML='';$('modeLabel').textContent={mission:'Mission Deck',fact:'Fact Deck',reveal:'Reveal Deck'}[state.mode];$('rareState').textContent='なし';$('panelTitle').textContent='カードを引こう';$('panelDesc').textContent='カードをタップ、または「カードを引く」を押してください。';resetCard();switchScreen(game);partyMoment('GAME START','カードをめくれ！','gold',850);updateTimer();state.timerId=setInterval(()=>{state.remaining--;updateTimer();if(state.remaining<=0)finishGame()},1000)}
 function resetCard(){state.flipped=false;card.classList.remove('flipped');$('title').textContent='カードをタップ';$('desc').textContent='次のカードをめくります。';$('type').textContent='HEARTSHOT';$('suit').textContent='♥️';front.classList.remove('rare');$('remain').textContent=state.deck.length;$('hint').textContent='カードをタップしてめくる'}
-function draw(){if(state.flipped){nextTurn();return}if(!state.deck.length)state.deck=buildDeck();const item=state.deck.pop();state.draws++;state.flipped=true;card.classList.add('flipped');beep();if(item.kind==='rare')showRare(item.data);else showNormal(item.data);$('remain').textContent=state.deck.length;$('hint').textContent='もう一度押すと次のカードへ';addHistory(item);}
+function draw(){if(state.flipped){nextTurn();return}if(!state.deck.length)state.deck=buildDeck();const item=state.deck.pop();state.draws++;state.flipped=true;card.classList.add('flipped');beep();if(item.kind==='rare')showRare(item.data);else showNormal(item.data);$('remain').textContent=state.deck.length;$('hint').textContent='もう一度押すと次のカードへ';addHistory(item);cardImpact();}
 function showNormal(d){front.classList.remove('rare');const icons={mission:'🎴',fact:'📊',reveal:'🎭'};$('suit').textContent=state.pendingAll?'💣':icons[state.mode];$('type').textContent=(state.pendingAll?'全員で実行 · ':'')+({mission:'MISSION CARD',fact:'FACT CARD',reveal:'REVEAL CARD'}[state.mode]);$('title').textContent=d[0];$('desc').textContent=d[1];$('panelTitle').textContent=d[0];$('panelDesc').textContent=d[1];if(state.mode==='fact'){const r=cheersRules[Math.floor(Math.random()*cheersRules.length)];$('cheersRule').textContent=r[1];$('panelDesc').textContent=d[1]+' 順位決定後：'+r[2]+'。'}else if(state.mode==='reveal'){$('cheersRule').textContent='拒否・失敗なら乾杯'}else{$('cheersRule').textContent=state.pendingAll?'全員が実行':'違反した人が乾杯'}if(state.pendingAll){state.pendingAll=false;$('rareState').textContent='全員ミッション発動済み'}}
-function showRare(d){state.rares++;front.classList.add('rare');$('suit').textContent=d[0];$('type').textContent='RARE CARD';$('title').textContent=d[1];$('desc').textContent=d[2];$('panelTitle').textContent=d[1];$('panelDesc').textContent=d[2];$('cheersRule').textContent='特殊効果';$('rareState').textContent=d[1];if(d[3]==='RESET'){$('rareState').textContent='全ミッション解除'}if(d[3]==='ALL')state.pendingAll=true;if(d[3]==='SHIELD')state.shield=true;}
+function showRare(d){state.rares++;partyMoment('RARE CARD!',d[1],'gold',1250);front.classList.add('rare');$('suit').textContent=d[0];$('type').textContent='RARE CARD';$('title').textContent=d[1];$('desc').textContent=d[2];$('panelTitle').textContent=d[1];$('panelDesc').textContent=d[2];$('cheersRule').textContent='特殊効果';$('rareState').textContent=d[1];if(d[3]==='RESET'){$('rareState').textContent='全ミッション解除'}if(d[3]==='ALL')state.pendingAll=true;if(d[3]==='SHIELD')state.shield=true;}
 function nextTurn(){resetCard()}
 function addHistory(item){const d=item.data,el=document.createElement('div');el.className='history-item';el.innerHTML=`<b>${item.kind==='rare'?d[0]+' '+d[1]:d[0]}</b>${item.kind==='rare'?'レアカード':'カード'}`;$('history').prepend(el)}
 function updateTimer(){const m=Math.max(0,Math.floor(state.remaining/60)).toString().padStart(2,'0'),s=Math.max(0,state.remaining%60).toString().padStart(2,'0');$('timer').textContent=m+':'+s}
-function finishGame(){clearInterval(state.timerId);$('drawCount').textContent=state.draws;$('rareCount').textContent=state.rares;const mins=Math.max(1,Math.round((Date.now()-state.startAt)/60000));$('playedTime').textContent=mins+'分';switchScreen(result)}
+function finishGame(){clearInterval(state.timerId);partyMoment('FINISH!','おつかれさま！','gold',1050);$('drawCount').textContent=state.draws;$('rareCount').textContent=state.rares;const mins=Math.max(1,Math.round((Date.now()-state.startAt)/60000));$('playedTime').textContent=mins+'分';switchScreen(result)}
 function skip(){showToast('このカードはスキップしました');nextTurn()}
 const diceState={rolling:false,history:[]};
 const diceChars=['','⚀','⚁','⚂','⚃','⚄','⚅'];
@@ -665,6 +769,6 @@ $('panicStart').onclick=startPanic;$('panicButtons').onclick=tapPanic;$('panicDi
 $('startDiceBtn').onclick=startDice;$('rollDiceBtn').onclick=rollDice;$('nextDicePlayerBtn').onclick=nextDicePlayer;$('clearDiceBtn').onclick=()=>{diceState.history=[];renderDiceHistory();showToast('履歴を削除しました')};$('startEggBtn').onclick=startEgg;
 document.querySelectorAll('.mode-card').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.mode-card').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');state.mode=b.dataset.mode;const info={mission:['Mission Deck','🎴'],fact:['Fact Deck','📊'],reveal:['Reveal Deck','📸']}[state.mode];$('selectedDeckName').textContent=info[0];$('selectedDeckIcon').textContent=info[1];$('setupDrawer').classList.add('show');beep();setTimeout(()=>$('setupDrawer').scrollIntoView({behavior:'smooth',block:'nearest'}),80)}));$('startBtn').onclick=startGame;$('scene').onclick=draw;$('nextBtn').onclick=draw;$('skipBtn').onclick=skip;$('finishBtn').onclick=finishGame;$('againBtn').onclick=()=>{clearInterval(state.timerId);switchScreen(category)};
 $('soundBtn').onclick=()=>{$('settingsModal').classList.add('open');$('settingsClose').focus()};$('settingsClose').onclick=()=>$('settingsModal').classList.remove('open');$('settingsModal').onclick=e=>{if(e.target===$('settingsModal'))$('settingsModal').classList.remove('open')};document.addEventListener('keydown',e=>{if(e.key==='Escape')$('settingsModal').classList.remove('open')});$('sfxToggle').onchange=e=>setPref('sound',e.target.checked);$('bgmToggle').onchange=e=>setPref('bgm',e.target.checked);$('vibrationToggle').onchange=e=>setPref('vibration',e.target.checked);$('silentToggle').onchange=e=>setPref('silent',e.target.checked);
-renderPrefs();
+observePartyResults();renderPrefs();
 </script>
 </body></html>
