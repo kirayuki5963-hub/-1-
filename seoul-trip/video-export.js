@@ -80,7 +80,7 @@
     const target = document.querySelector(".video-addon-estimate");
     if (target) target.textContent = `完成動画 約${Math.ceil(seconds)}秒`;
     const run = document.querySelector(".video-addon-run");
-    if (run) run.disabled = state.exporting || !state.music || !state.photos.some((photo) => state.settings.get(photo.id)?.selected);
+    if (run) run.disabled = state.exporting || !state.photos.some((photo) => state.settings.get(photo.id)?.selected);
   }
 
   function photoRow(photo, index) {
@@ -137,7 +137,7 @@
         <div class="video-addon-list"></div>
         <div class="video-addon-music">
           <input type="file" accept="audio/*,.mp3,.m4a,.aac,.wav">
-          <button type="button">♬ 音楽を選択</button><span>MP3・M4Aなど</span>
+          <button type="button">♬ 音楽を選択</button><span>BGMなしでも出力できます</span>
         </div>
         <div class="video-addon-info"><span class="video-addon-estimate"></span><small>動画の長さと同じ時間をかけて作成します。画面を閉じずにお待ちください。</small></div>
         <p class="video-addon-error" hidden></p>
@@ -155,7 +155,7 @@
     pick.addEventListener("click", () => input.click());
     input.addEventListener("change", () => {
       state.music = input.files?.[0] || null;
-      name.textContent = state.music ? state.music.name : "MP3・M4Aなど";
+      name.textContent = state.music ? state.music.name : "BGMなしでも出力できます";
       pick.textContent = state.music ? "♬ 音楽を変更" : "♬ 音楽を選択";
       setError("");
       updateEstimate();
@@ -167,7 +167,7 @@
   async function exportVideo() {
     if (state.exporting) return;
     const chosen = state.photos.filter((photo) => state.settings.get(photo.id)?.selected);
-    if (!state.music || !chosen.length) return;
+    if (!chosen.length) return;
     if (typeof MediaRecorder === "undefined" || !HTMLCanvasElement.prototype.captureStream) {
       setError("このブラウザは動画出力に対応していません。最新のSafariまたはChromeで開いてください。");
       return;
@@ -182,6 +182,7 @@
     setError("");
     let audioUrl = "";
     let audioContext = null;
+    let audio = null;
     let recorder = null;
     let wakeLock = null;
     try {
@@ -193,19 +194,21 @@
       const hero = await loadImage(HERO);
       const stream = canvas.captureStream(30);
 
-      audioUrl = URL.createObjectURL(state.music);
-      const audio = new Audio(audioUrl);
-      audio.loop = true;
-      audio.preload = "auto";
-      audioContext = new AudioContext();
-      await audioContext.resume();
-      const source = audioContext.createMediaElementSource(audio);
-      const gain = audioContext.createGain();
-      const destination = audioContext.createMediaStreamDestination();
-      gain.gain.value = 0.82;
-      source.connect(gain);
-      gain.connect(destination);
-      destination.stream.getAudioTracks().forEach((track) => stream.addTrack(track));
+      if (state.music) {
+        audioUrl = URL.createObjectURL(state.music);
+        audio = new Audio(audioUrl);
+        audio.loop = true;
+        audio.preload = "auto";
+        audioContext = new AudioContext();
+        await audioContext.resume();
+        const source = audioContext.createMediaElementSource(audio);
+        const gain = audioContext.createGain();
+        const destination = audioContext.createMediaStreamDestination();
+        gain.gain.value = 0.82;
+        source.connect(gain);
+        gain.connect(destination);
+        destination.stream.getAudioTracks().forEach((track) => stream.addTrack(track));
+      }
 
       const candidates = ["video/mp4;codecs=h264,aac", "video/mp4", "video/webm;codecs=vp9,opus", "video/webm;codecs=vp8,opus", "video/webm"];
       const mimeType = candidates.find((type) => MediaRecorder.isTypeSupported(type)) || "";
@@ -301,7 +304,7 @@
       try { wakeLock = await navigator.wakeLock?.request("screen"); } catch (_) {}
       drawHome();
       recorder.start(1000);
-      await audio.play();
+      if (audio) await audio.play();
       run.textContent = "作成中 · トップ画面";
       await renderFor(2400, () => drawHome());
       run.textContent = "作成中 · ブラックアウト";
@@ -316,7 +319,7 @@
       await wait(250);
       recorder.stop();
       await stopped;
-      audio.pause();
+      if (audio) audio.pause();
       const type = recorder.mimeType || mimeType || "video/webm";
       download(new Blob(chunks, { type }), type.includes("mp4") ? "mp4" : "webm");
       run.textContent = "保存しました";
